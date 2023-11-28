@@ -1,38 +1,57 @@
-export const event = () => {
+import { getDateFormatMonthDay } from "@utils/dates";
+import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
+import { EventItem } from "mock/data";
+
+const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
+
+  return (
+    `<li class="event__offer">
+      <span class="event__offer-title">${title}</span>
+      +
+      €&nbsp;<span class="event__offer-price">${price}</span>
+    </li>`
+  );
+};
+
+export const event = (options: EventItem) => {
+  const { basePrice, type, destination, offers, dateFrom, dateTo } = options;
+
+  const hoursArrive = dateFrom.getHours();
+  const minutesArrive = dateFrom.getMinutes();
+  const hoursLeave = dateTo.getHours();
+  const minutesLeave = dateTo.getMinutes();
+  const durationTime = new Date(+dateTo - +dateFrom);
+  const durationHours = durationTime.getHours();
+  const durationMinutes = durationTime.getMinutes();
+  const { month, day } = getDateFormatMonthDay(dateTo);
+  const offersTemplate = getTemplate(offers, getOfferMarkup);
+
   return (
     `
     <li class="trip-events__item">
       <div class="event">
+      <time class="event__date">${month.toUpperCase()} ${day}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="./src/img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">Flight to Chamonix</h3>
+        <h3 class="event__title">${destination.name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T12:25">12:25</time>
+            <time class="event__start-time" datetime="2019-03-18T12:25">${hoursArrive}:${minutesArrive}</time>
             —
-            <time class="event__end-time" datetime="2019-03-18T13:35">13:35</time>
+            <time class="event__end-time" datetime="2019-03-18T13:35">${hoursLeave}:${minutesLeave}</time>
           </p>
-          <p class="event__duration">1H 10M</p>
+          <p class="event__duration">${durationHours}H ${durationMinutes}M</p>
         </div>
 
         <p class="event__price">
-          €&nbsp;<span class="event__price-value">160</span>
+          €&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Add luggage</span>
-            +
-            €&nbsp;<span class="event__offer-price">50</span>
-          </li>
-          <li class="event__offer">
-            <span class="event__offer-title">Switch to comfort</span>
-            +
-            €&nbsp;<span class="event__offer-price">80</span>
-            </li>
+          ${offersTemplate}
         </ul>
 
         <button class="event__rollup-btn" type="button">

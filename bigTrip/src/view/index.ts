@@ -8,3 +8,4 @@ export { menu } from './menu/menu';
 export { sort } from './sort/sort';
 export { totalCost } from './totalCost/totalCost';
 export { tripInfo } from './tripInfo/tripInfo';
+export { filter } from './filter/filter';

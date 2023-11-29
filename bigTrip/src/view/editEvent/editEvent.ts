@@ -1,6 +1,7 @@
 import { TRANSFER_TYPES, ACTIVITY_TYPES, DESTINATION_NAMES, OFFERS } from "@constants";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
-import { EventItem } from "mock/data";
+import { Destination, EventItem } from "mock/data";
+import { ViewComponent } from "view/types";
 
 
 const getTransferMarkup: GetMarkupCallBack = (transferType) => {
@@ -48,94 +49,210 @@ const getOfferMarkup: GetMarkupCallBack = (options, idx) => {
 };
 
 
-export const editEvent = (options: EventItem) => {
-  const { type, destination } = options;
+// export const editEvent = (options: EventItem) => {
+//   const { type, destination } = options;
 
 
-  const transfers = getTemplate(TRANSFER_TYPES, getTransferMarkup);
-  const activities = getTemplate(ACTIVITY_TYPES, getActivityMarkup);
-  const images = getTemplate(destination.pictures, getImageMarkup);
-  const destinationOptions = getTemplate(DESTINATION_NAMES, getOptionsMarkup);
-  const offers = getTemplate(OFFERS, getOfferMarkup);
+//   const transfers = getTemplate(TRANSFER_TYPES, getTransferMarkup);
+//   const activities = getTemplate(ACTIVITY_TYPES, getActivityMarkup);
+//   const images = getTemplate(destination.pictures, getImageMarkup);
+//   const destinationOptions = getTemplate(DESTINATION_NAMES, getOptionsMarkup);
+//   const offers = getTemplate(OFFERS, getOfferMarkup);
 
-  return (
-    `
-    <form class="trip-events__item  event  event--edit" action="#" method="post">
-      <header class="event__header">
-        <div class="event__type-wrapper">
-          <label class="event__type  event__type-btn" for="event-type-toggle-1">
-            <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="./src/img/icons/${type}.png" alt="Event type icon">
-          </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+//   return (
+//     `
+//     <form class="trip-events__item  event  event--edit" action="#" method="post">
+//       <header class="event__header">
+//         <div class="event__type-wrapper">
+//           <label class="event__type  event__type-btn" for="event-type-toggle-1">
+//             <span class="visually-hidden">Choose event type</span>
+//             <img class="event__type-icon" width="17" height="17" src="./src/img/icons/${type}.png" alt="Event type icon">
+//           </label>
+//           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
-          <div class="event__type-list">
-            <fieldset class="event__type-group">
-              <legend class="visually-hidden">Transfer</legend>
-              ${transfers}
-            </fieldset>
+//           <div class="event__type-list">
+//             <fieldset class="event__type-group">
+//               <legend class="visually-hidden">Transfer</legend>
+//               ${transfers}
+//             </fieldset>
 
-            <fieldset class="event__type-group">
-              <legend class="visually-hidden">Activity</legend>
-              ${activities}
-            </fieldset>
-          </div>
-        </div>
+//             <fieldset class="event__type-group">
+//               <legend class="visually-hidden">Activity</legend>
+//               ${activities}
+//             </fieldset>
+//           </div>
+//         </div>
 
-        <div class="event__field-group  event__field-group--destination">
-          <label class="event__label  event__type-output" for="event-destination-1">
-            Flight to
-          </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
-          <datalist id="destination-list-1">
-            ${destinationOptions}
-          </datalist>
-        </div>
+//         <div class="event__field-group  event__field-group--destination">
+//           <label class="event__label  event__type-output" for="event-destination-1">
+//             Flight to
+//           </label>
+//           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+//           <datalist id="destination-list-1">
+//             ${destinationOptions}
+//           </datalist>
+//         </div>
 
-        <div class="event__field-group  event__field-group--time">
-          <label class="visually-hidden" for="event-start-time-1">
-            From
-          </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
-          —
-          <label class="visually-hidden" for="event-end-time-1">
-            To
-          </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
-        </div>
+//         <div class="event__field-group  event__field-group--time">
+//           <label class="visually-hidden" for="event-start-time-1">
+//             From
+//           </label>
+//           <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+//           —
+//           <label class="visually-hidden" for="event-end-time-1">
+//             To
+//           </label>
+//           <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+//         </div>
 
-        <div class="event__field-group  event__field-group--price">
-          <label class="event__label" for="event-price-1">
-            <span class="visually-hidden">Price</span>
-            €
-          </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
-        </div>
+//         <div class="event__field-group  event__field-group--price">
+//           <label class="event__label" for="event-price-1">
+//             <span class="visually-hidden">Price</span>
+//             €
+//           </label>
+//           <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+//         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Cancel</button>
-      </header>
-      <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+//         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+//         <button class="event__reset-btn" type="reset">Cancel</button>
+//       </header>
+//       <section class="event__details">
+//         <section class="event__section  event__section--offers">
+//           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-          <div class="event__available-offers">
-            ${offers}
-          </div>
-        </section>
+//           <div class="event__available-offers">
+//             ${offers}
+//           </div>
+//         </section>
 
-        <section class="event__section  event__section--destination">
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destination.description}</p>
+//         <section class="event__section  event__section--destination">
+//           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+//           <p class="event__destination-description">${destination.description}</p>
 
-          <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${images}
+//           <div class="event__photos-container">
+//             <div class="event__photos-tape">
+//               ${images}
+//             </div>
+//           </div>
+//         </section>
+//       </section>
+//   </form>
+//   `
+//   );
+// };
+
+interface EditEventComponent extends ViewComponent {
+  _options: EventItem;
+  _transfers: string;
+  _activities: string;
+  _images: string;
+  _destinationOptions: string;
+  _offers: string;
+
+}
+
+export class EditEvent implements EditEventComponent {
+
+  _options: EventItem;
+  _transfers: string;
+  _activities: string;
+  _images: string;
+  _destinationOptions: string;
+  _offers: string;
+
+  constructor(options: EventItem) {
+    this._options = options;
+    this._transfers = getTemplate(TRANSFER_TYPES, getTransferMarkup);
+    this._activities = getTemplate(ACTIVITY_TYPES, getActivityMarkup);
+    this._images = getTemplate(this._options.destination.pictures, getImageMarkup);
+    this._destinationOptions = getTemplate(DESTINATION_NAMES, getOptionsMarkup);
+    this._offers = getTemplate(OFFERS, getOfferMarkup);
+  }
+
+
+
+  getTemplate = () => {
+
+    const { type, destination } = this._options;
+    return (
+      `
+      <form class="trip-events__item  event  event--edit" action="#" method="post">
+        <header class="event__header">
+          <div class="event__type-wrapper">
+            <label class="event__type  event__type-btn" for="event-type-toggle-1">
+              <span class="visually-hidden">Choose event type</span>
+              <img class="event__type-icon" width="17" height="17" src="./src/img/icons/${type}.png" alt="Event type icon">
+            </label>
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+  
+            <div class="event__type-list">
+              <fieldset class="event__type-group">
+                <legend class="visually-hidden">Transfer</legend>
+                ${this._transfers}
+              </fieldset>
+  
+              <fieldset class="event__type-group">
+                <legend class="visually-hidden">Activity</legend>
+                ${this._activities}
+              </fieldset>
             </div>
           </div>
+  
+          <div class="event__field-group  event__field-group--destination">
+            <label class="event__label  event__type-output" for="event-destination-1">
+              Flight to
+            </label>
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+            <datalist id="destination-list-1">
+              ${this._destinationOptions}
+            </datalist>
+          </div>
+  
+          <div class="event__field-group  event__field-group--time">
+            <label class="visually-hidden" for="event-start-time-1">
+              From
+            </label>
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+            —
+            <label class="visually-hidden" for="event-end-time-1">
+              To
+            </label>
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+          </div>
+  
+          <div class="event__field-group  event__field-group--price">
+            <label class="event__label" for="event-price-1">
+              <span class="visually-hidden">Price</span>
+              €
+            </label>
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+          </div>
+  
+          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+          <button class="event__reset-btn" type="reset">Cancel</button>
+        </header>
+        <section class="event__details">
+          <section class="event__section  event__section--offers">
+            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  
+            <div class="event__available-offers">
+              ${this._offers}
+            </div>
+          </section>
+  
+          <section class="event__section  event__section--destination">
+            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            <p class="event__destination-description">${destination.description}</p>
+  
+            <div class="event__photos-container">
+              <div class="event__photos-tape">
+                ${this._images}
+              </div>
+            </div>
+          </section>
         </section>
-      </section>
-  </form>
-  `
-  );
-};
+    </form>
+    `
+    );
+  };
+}

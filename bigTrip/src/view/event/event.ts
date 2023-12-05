@@ -82,7 +82,7 @@ export class Event extends AbstractComponent {
       const editEvent = new EditEvent(this._options);
       editEvent.onSaveEventClick();
       editEvent.onEscClick();
-      replace(editEvent.getElement(), this._element);
+      replace(editEvent, this);
     });
   };
 

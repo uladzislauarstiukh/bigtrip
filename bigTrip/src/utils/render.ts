@@ -24,10 +24,12 @@ const createNodeElement = (html = '') => {
   return parentNode.firstElementChild;
 };
 
-const replace = (newElement: NodeElement, oldElement: NodeElement) => {
-  const parent = oldElement?.parentNode;
-  if (parent && newElement && oldElement) {
-    parent.replaceChild(newElement, oldElement);
+const replace = (newComponent: ViewComponent, oldComponent: ViewComponent) => {
+  const parentElement = oldComponent.getElement()?.parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+  if (parentElement && newElement && oldElement) {
+    parentElement.replaceChild(newElement, oldElement);
   }
 };
 

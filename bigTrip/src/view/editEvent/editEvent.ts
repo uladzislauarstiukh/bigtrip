@@ -170,7 +170,7 @@ export class EditEvent extends AbstractComponent {
     button?.addEventListener('click', (e: Event) => {
       e.preventDefault();
       const event = new EventPoint(this._options);
-      replace(event.getElement(), this._element);
+      replace(event, this);
       event.onEditEventClick();
     });
   };
@@ -179,7 +179,7 @@ export class EditEvent extends AbstractComponent {
     window.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key === 'Escape' || e.code === 'Escape') {
         const event = new EventPoint(this._options);
-        replace(event.getElement(), this._element);
+        replace(event, this);
         event.onEditEventClick();
       }
     });

@@ -1,4 +1,4 @@
-import { Position, render, replace, } from "@utils/render";
+import { Position, render } from "@utils/render";
 import {
   ButtonNewEvent,
   Info,
@@ -8,15 +8,11 @@ import {
   Filter,
   Sort,
   EventList,
-  Event as EventPoint,
-  EditEvent,
 } from "@view";
 import { generateData } from "./mock/data";
 import { getTotalCost } from "@utils/getTotalCost";
-import { ViewComponent } from "view/types";
+import { TripController } from "./controllers/TripController";
 
-
-const COUNT = 10;
 const data = generateData();
 const totalCostNumber = getTotalCost(data);
 
@@ -47,38 +43,11 @@ const tripEventsNode = document.querySelector('.trip-events');
 render(tripEventsNode, sort);
 render(tripEventsNode, eventList);
 
-
 const tripEventsListNode = document.querySelector('.trip-events__list');
 
+const tripController = new TripController(tripEventsListNode);
+tripController.render(data)
 
-
-
-
-for (let i = 0; i < COUNT; i++) {
-  const event = new EventPoint(data[i]);
-
-  event.setOnEditEventHandler(() => {
-    const editEvent = new EditEvent(data[i]);
-    replace(editEvent, event);
-
-    editEvent.setOnSaveEventHandler((e: Event) => {
-      e.preventDefault();
-      replace(event, editEvent);
-    });
-
-    const onEscClick = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' || e.code === 'Escape') {
-        replace(event, editEvent);
-      }
-      window.removeEventListener('keydown', onEscClick);
-    };
-    window.addEventListener('keydown', onEscClick);
-  });
-
-  render(tripEventsListNode, event);
-}
-
-console.log(data);
 
 
 

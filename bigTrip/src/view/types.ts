@@ -1,3 +1,7 @@
+type GetTemplate = never | string;
+
 export interface ViewComponent {
-  getTemplate: () => string;
+  _element: Element | null;
+  getTemplate: () => GetTemplate;
+  getElement: () => Element | null;
 }

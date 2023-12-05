@@ -1,4 +1,5 @@
 export { addNewEvent } from './addNewEvent/addNewEvent';
+export { AbstractComponent } from './abstractComponent/abstractComponent';
 export { ButtonNewEvent } from './buttonNewEvent/buttonNewEvent';
 export { EditEvent } from './editEvent/editEvent';
 export { Event } from './event/event';

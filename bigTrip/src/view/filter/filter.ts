@@ -1,6 +1,6 @@
 import { MENU_FILTERS } from "@constants";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
-import { ViewComponent } from "view/types";
+import { AbstractComponent } from "@view";
 
 const getFilterMarkup: GetMarkupCallBack = (filterName) => {
   return (
@@ -11,20 +11,22 @@ const getFilterMarkup: GetMarkupCallBack = (filterName) => {
   );
 };
 
+const createFilterTemplate = () => {
+  const filters = getTemplate(MENU_FILTERS, getFilterMarkup);
 
-export class Filter implements ViewComponent {
+  return (
+    `
+    <form class="trip-filters" action="#" method="get">
+      ${filters}
+      <button class="visually-hidden" type="submit">Accept filter</button>
+    </form>
+  `
+  );
+};
+export class Filter extends AbstractComponent {
 
   getTemplate = () => {
-    const filters = getTemplate(MENU_FILTERS, getFilterMarkup);
-
-    return (
-      `
-      <form class="trip-filters" action="#" method="get">
-        ${filters}
-        <button class="visually-hidden" type="submit">Accept filter</button>
-      </form>
-    `
-    );
+    return createFilterTemplate();
   };
 
 }

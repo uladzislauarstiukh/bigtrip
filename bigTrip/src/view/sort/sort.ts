@@ -1,6 +1,6 @@
 import { SORT_TYPES } from "@constants";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
-import { ViewComponent } from "view/types";
+import { AbstractComponent } from "@view";
 
 const getSortMarkup: GetMarkupCallBack = (sortType) => {
   return (
@@ -13,19 +13,19 @@ const getSortMarkup: GetMarkupCallBack = (sortType) => {
   );
 };
 
-export class Sort implements ViewComponent {
-  getTemplate = () => {
-    const sorts = getTemplate(SORT_TYPES, getSortMarkup);
+const createSortTemplate = () => {
+  const sorts = getTemplate(SORT_TYPES, getSortMarkup);
 
-    return (
-      `
-      <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-        
+  return (
+    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
           ${sorts}
         <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
-      </form>
-      `
-    );
+    </form>`
+  );
+};
+export class Sort extends AbstractComponent {
+  getTemplate = () => {
+    return createSortTemplate();
   };
 
 }

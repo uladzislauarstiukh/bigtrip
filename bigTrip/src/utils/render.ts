@@ -1,3 +1,5 @@
+import { ViewComponent } from "view/types";
+
 enum Position {
   AfterBegin = 'afterbegin',
   Afterend = 'afterend',
@@ -7,9 +9,10 @@ enum Position {
 
 type NodeElement = Element | null;
 
-type Render = (container: NodeElement, element: NodeElement, position?: Position) => void;
+type Render = (container: NodeElement, component: ViewComponent, position?: Position) => void;
 
-const render: Render = (container, element, position = Position.Beforeend) => {
+const render: Render = (container, component, position = Position.Beforeend) => {
+  const element = component.getElement();
   if (container && element) {
     container.insertAdjacentElement(position, element);
   }

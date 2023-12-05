@@ -1,14 +1,36 @@
-export enum Position {
+enum Position {
   AfterBegin = 'afterbegin',
   Afterend = 'afterend',
   Beforebegin = 'beforebegin',
   Beforeend = 'beforeend'
 }
 
-type Render = (container: Element | null, template: string, position?: Position) => void;
+type NodeElement = Element | null;
 
-export const render: Render = (container, template, position = Position.Beforeend) => {
-  if (container) {
-    container.insertAdjacentHTML(position, template);
+type Render = (container: NodeElement, element: NodeElement, position?: Position) => void;
+
+const render: Render = (container, element, position = Position.Beforeend) => {
+  if (container && element) {
+    container.insertAdjacentElement(position, element);
   }
+};
+
+const createNodeElement = (html = '') => {
+  const parentNode = document.createElement('div');
+  parentNode.innerHTML = html;
+  return parentNode.firstElementChild;
+};
+
+const replace = (newElement: NodeElement, oldElement: NodeElement) => {
+  const parent = oldElement?.parentNode;
+  if (parent && newElement && oldElement) {
+    parent.replaceChild(newElement, oldElement);
+  }
+};
+
+export {
+  Position,
+  render,
+  createNodeElement,
+  replace
 };

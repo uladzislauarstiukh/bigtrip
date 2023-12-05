@@ -1,7 +1,8 @@
 import { TRANSFER_TYPES, ACTIVITY_TYPES, DESTINATION_NAMES, OFFERS } from "@constants";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
+import { replace } from "@utils/render";
+import { AbstractComponent, Event as EventPoint } from "@view";
 import { EventItem } from "mock/data";
-
 
 const getTransferMarkup: GetMarkupCallBack = (transferType) => {
   return (
@@ -48,9 +49,8 @@ const getOfferMarkup: GetMarkupCallBack = (options, idx) => {
 };
 
 
-export const editEvent = (options: EventItem) => {
+const createEditEventTemplate = (options: EventItem) => {
   const { type, destination } = options;
-
 
   const transfers = getTemplate(TRANSFER_TYPES, getTransferMarkup);
   const activities = getTemplate(ACTIVITY_TYPES, getActivityMarkup);
@@ -139,3 +139,49 @@ export const editEvent = (options: EventItem) => {
   `
   );
 };
+
+export class EditEvent extends AbstractComponent {
+
+  _options: EventItem;
+  _transfers: string;
+  _activities: string;
+  _images: string;
+  _destinationOptions: string;
+  _offers: string;
+
+  constructor(options: EventItem) {
+    super();
+    this._options = options;
+    this._transfers = getTemplate(TRANSFER_TYPES, getTransferMarkup);
+    this._activities = getTemplate(ACTIVITY_TYPES, getActivityMarkup);
+    this._images = getTemplate(this._options.destination.pictures, getImageMarkup);
+    this._destinationOptions = getTemplate(DESTINATION_NAMES, getOptionsMarkup);
+    this._offers = getTemplate(OFFERS, getOfferMarkup);
+  }
+
+  getTemplate = () => {
+    return createEditEventTemplate(this._options);
+  };
+
+
+  onSaveEventClick = () => {
+    const button = this.getElement()?.querySelector('.event__save-btn');
+
+    button?.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      const event = new EventPoint(this._options);
+      replace(event.getElement(), this._element);
+      event.onEditEventClick();
+    });
+  };
+
+  onEscClick = () => {
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.code === 'Escape') {
+        const event = new EventPoint(this._options);
+        replace(event.getElement(), this._element);
+        event.onEditEventClick();
+      }
+    });
+  };
+}

@@ -1,5 +1,7 @@
 import { getDateFormatMonthDay } from "@utils/dates";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
+import { replace } from "@utils/render";
+import { AbstractComponent, EditEvent } from "@view";
 import { EventItem } from "mock/data";
 
 const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
@@ -13,7 +15,11 @@ const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
   );
 };
 
-export const event = (options: EventItem) => {
+// interface EventComponent extends ViewComponent {
+//   _options: EventItem;
+// }
+
+const createEventTemplate = (options: EventItem) => {
   const { basePrice, type, destination, offers, dateFrom, dateTo } = options;
 
   const hoursArrive = dateFrom.getHours();
@@ -62,3 +68,26 @@ export const event = (options: EventItem) => {
     `
   );
 };
+export class Event extends AbstractComponent {
+  _options: EventItem;
+
+  constructor(options: EventItem) {
+    super();
+    this._options = options;
+  }
+
+  onEditEventClick = () => {
+    const button = this.getElement()?.querySelector('.event__rollup-btn');
+    button?.addEventListener('click', () => {
+      const editEvent = new EditEvent(this._options);
+      editEvent.onSaveEventClick();
+      editEvent.onEscClick();
+      replace(editEvent.getElement(), this._element);
+    });
+  };
+
+  getTemplate = () => {
+    return createEventTemplate(this._options);
+  };
+
+}

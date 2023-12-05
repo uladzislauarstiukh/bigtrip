@@ -1,4 +1,6 @@
-export const menu = () => {
+import { AbstractComponent } from "@view";
+
+const createMenuTemplate = () => {
   return (
     `
       <nav class="trip-controls__trip-tabs  trip-tabs">
@@ -8,3 +10,8 @@ export const menu = () => {
     `
   );
 };
+export class Menu extends AbstractComponent {
+  getTemplate = () => {
+    return createMenuTemplate();
+  };
+}

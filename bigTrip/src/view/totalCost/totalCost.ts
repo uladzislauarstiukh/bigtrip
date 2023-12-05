@@ -1,22 +1,22 @@
-import { ViewComponent } from "view/types";
+import { AbstractComponent } from "@view";
 
-interface TotalCostComponent extends ViewComponent {
-  _totalCost: number;
-}
-export class TotalCost implements TotalCostComponent {
+const createTotalCostTemplate = (totalCost: number) => {
+  return (
+    `<p class="trip-info__cost">
+      Total: €&nbsp;<span class="trip-info__cost-value">${totalCost}</span>
+    </p>`
+  );
+};
+export class TotalCost extends AbstractComponent {
   _totalCost: number;
 
   constructor(totalCost: number) {
+    super();
     this._totalCost = totalCost;
   }
 
   getTemplate = () => {
-    return (
-      `<p class="trip-info__cost">
-        Total: €&nbsp;<span class="trip-info__cost-value">${this._totalCost}</span>
-      </p>
-      `
-    );
+    return createTotalCostTemplate(this._totalCost);
   };
 
 }

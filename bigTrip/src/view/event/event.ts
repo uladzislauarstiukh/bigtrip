@@ -1,7 +1,8 @@
 import { getDateFormatMonthDay } from "@utils/dates";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
+import { replace } from "@utils/render";
+import { AbstractComponent, EditEvent } from "@view";
 import { EventItem } from "mock/data";
-import { ViewComponent } from "view/types";
 
 const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
 
@@ -14,117 +15,79 @@ const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
   );
 };
 
-// export const event = (options: EventItem) => {
-//   const { basePrice, type, destination, offers, dateFrom, dateTo } = options;
+// interface EventComponent extends ViewComponent {
+//   _options: EventItem;
+// }
 
-//   const hoursArrive = dateFrom.getHours();
-//   const minutesArrive = dateFrom.getMinutes();
-//   const hoursLeave = dateTo.getHours();
-//   const minutesLeave = dateTo.getMinutes();
-//   const durationTime = new Date(+dateTo - +dateFrom);
-//   const durationHours = durationTime.getHours();
-//   const durationMinutes = durationTime.getMinutes();
-//   const { month, day } = getDateFormatMonthDay(dateTo);
-//   const offersTemplate = getTemplate(offers, getOfferMarkup);
+const createEventTemplate = (options: EventItem) => {
+  const { basePrice, type, destination, offers, dateFrom, dateTo } = options;
 
-//   return (
-//     `
-//     <li class="trip-events__item">
-//       <div class="event">
-//       <time class="event__date">${month.toUpperCase()} ${day}</time>
-//         <div class="event__type">
-//           <img class="event__type-icon" width="42" height="42" src="./src/img/icons/${type}.png" alt="Event type icon">
-//         </div>
-//         <h3 class="event__title">${destination.name}</h3>
+  const hoursArrive = dateFrom.getHours();
+  const minutesArrive = dateFrom.getMinutes();
+  const hoursLeave = dateTo.getHours();
+  const minutesLeave = dateTo.getMinutes();
+  const durationTime = new Date(+dateTo - +dateFrom);
+  const durationHours = durationTime.getHours();
+  const durationMinutes = durationTime.getMinutes();
+  const { month, day } = getDateFormatMonthDay(dateTo);
+  const offersTemplate = getTemplate(offers, getOfferMarkup);
 
-//         <div class="event__schedule">
-//           <p class="event__time">
-//             <time class="event__start-time" datetime="2019-03-18T12:25">${hoursArrive}:${minutesArrive}</time>
-//             —
-//             <time class="event__end-time" datetime="2019-03-18T13:35">${hoursLeave}:${minutesLeave}</time>
-//           </p>
-//           <p class="event__duration">${durationHours}H ${durationMinutes}M</p>
-//         </div>
+  return (
+    `
+    <li class="trip-events__item">
+      <div class="event">
+      <time class="event__date">${month.toUpperCase()} ${day}</time>
+        <div class="event__type">
+          <img class="event__type-icon" width="42" height="42" src="./src/img/icons/${type}.png" alt="Event type icon">
+        </div>
+        <h3 class="event__title">${destination.name}</h3>
 
-//         <p class="event__price">
-//           €&nbsp;<span class="event__price-value">${basePrice}</span>
-//         </p>
+        <div class="event__schedule">
+          <p class="event__time">
+            <time class="event__start-time" datetime="2019-03-18T12:25">${hoursArrive}:${minutesArrive}</time>
+            —
+            <time class="event__end-time" datetime="2019-03-18T13:35">${hoursLeave}:${minutesLeave}</time>
+          </p>
+          <p class="event__duration">${durationHours}H ${durationMinutes}M</p>
+        </div>
 
-//         <h4 class="visually-hidden">Offers:</h4>
-//         <ul class="event__selected-offers">
-//           ${offersTemplate}
-//         </ul>
+        <p class="event__price">
+          €&nbsp;<span class="event__price-value">${basePrice}</span>
+        </p>
 
-//         <button class="event__rollup-btn" type="button">
-//           <span class="visually-hidden">Open event</span>
-//         </button>
-//       </div>
-//     </li>
-//     `
-//   );
-// };
+        <h4 class="visually-hidden">Offers:</h4>
+        <ul class="event__selected-offers">
+          ${offersTemplate}
+        </ul>
 
-
-
-interface EventComponent extends ViewComponent {
-  _options: EventItem;
-}
-
-export class Event implements EventComponent {
+        <button class="event__rollup-btn" type="button">
+          <span class="visually-hidden">Open event</span>
+        </button>
+      </div>
+    </li>
+    `
+  );
+};
+export class Event extends AbstractComponent {
   _options: EventItem;
 
   constructor(options: EventItem) {
+    super();
     this._options = options;
   }
 
+  onEditEventClick = () => {
+    const button = this.getElement()?.querySelector('.event__rollup-btn');
+    button?.addEventListener('click', () => {
+      const editEvent = new EditEvent(this._options);
+      editEvent.onSaveEventClick();
+      editEvent.onEscClick();
+      replace(editEvent.getElement(), this._element);
+    });
+  };
+
   getTemplate = () => {
-    const { basePrice, type, destination, offers, dateFrom, dateTo } = this._options;
-
-    const hoursArrive = dateFrom.getHours();
-    const minutesArrive = dateFrom.getMinutes();
-    const hoursLeave = dateTo.getHours();
-    const minutesLeave = dateTo.getMinutes();
-    const durationTime = new Date(+dateTo - +dateFrom);
-    const durationHours = durationTime.getHours();
-    const durationMinutes = durationTime.getMinutes();
-    const { month, day } = getDateFormatMonthDay(dateTo);
-    const offersTemplate = getTemplate(offers, getOfferMarkup);
-
-    return (
-      `
-      <li class="trip-events__item">
-        <div class="event">
-        <time class="event__date">${month.toUpperCase()} ${day}</time>
-          <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="./src/img/icons/${type}.png" alt="Event type icon">
-          </div>
-          <h3 class="event__title">${destination.name}</h3>
-  
-          <div class="event__schedule">
-            <p class="event__time">
-              <time class="event__start-time" datetime="2019-03-18T12:25">${hoursArrive}:${minutesArrive}</time>
-              —
-              <time class="event__end-time" datetime="2019-03-18T13:35">${hoursLeave}:${minutesLeave}</time>
-            </p>
-            <p class="event__duration">${durationHours}H ${durationMinutes}M</p>
-          </div>
-  
-          <p class="event__price">
-            €&nbsp;<span class="event__price-value">${basePrice}</span>
-          </p>
-  
-          <h4 class="visually-hidden">Offers:</h4>
-          <ul class="event__selected-offers">
-            ${offersTemplate}
-          </ul>
-  
-          <button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>
-        </div>
-      </li>
-      `
-    );
+    return createEventTemplate(this._options);
   };
 
 }

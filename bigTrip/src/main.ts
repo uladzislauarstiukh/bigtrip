@@ -1,4 +1,4 @@
-import { Position, render, } from "@utils/render";
+import { Position, render } from "@utils/render";
 import {
   ButtonNewEvent,
   Info,
@@ -8,25 +8,22 @@ import {
   Filter,
   Sort,
   EventList,
-  Event,
-  EditEvent
 } from "@view";
 import { generateData } from "./mock/data";
 import { getTotalCost } from "@utils/getTotalCost";
+import { TripController } from "./controllers/TripController";
 
-
-const COUNT = 10;
 const data = generateData();
 const totalCostNumber = getTotalCost(data);
 
-const info = new Info().getElement();
-const tripInfo = new TripInfo().getElement();
-const totalCost = new TotalCost(totalCostNumber).getElement();
-const menu = new Menu().getElement();
-const filter = new Filter().getElement();
-const buttonNewEvent = new ButtonNewEvent().getElement();
-const sort = new Sort().getElement();
-const eventList = new EventList().getElement();
+const info = new Info();
+const tripInfo = new TripInfo();
+const totalCost = new TotalCost(totalCostNumber);
+const menu = new Menu();
+const filter = new Filter();
+const buttonNewEvent = new ButtonNewEvent();
+const sort = new Sort();
+const eventList = new EventList();
 
 const tripMainNode = document.querySelector('.trip-main');
 render(tripMainNode, info, Position.AfterBegin);
@@ -46,15 +43,11 @@ const tripEventsNode = document.querySelector('.trip-events');
 render(tripEventsNode, sort);
 render(tripEventsNode, eventList);
 
-
 const tripEventsListNode = document.querySelector('.trip-events__list');
 
-for (let i = 0; i < COUNT; i++) {
-  const event = new Event(data[i]);
-  event.onEditEventClick();
-  render(tripEventsListNode, event.getElement());
-}
+const tripController = new TripController(tripEventsListNode);
+tripController.render(data)
 
-console.log(data);
+
 
 

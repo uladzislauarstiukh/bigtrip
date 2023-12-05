@@ -7,6 +7,9 @@ export class AbstractComponent implements ViewComponent {
 
   constructor() {
     this._element = null;
+    if (new.target === AbstractComponent) {
+      throw Error('Can not call class AbstractComponent with new key word');
+    }
   }
 
   getTemplate = () => {

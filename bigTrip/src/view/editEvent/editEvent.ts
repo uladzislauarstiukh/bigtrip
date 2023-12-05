@@ -1,7 +1,6 @@
 import { TRANSFER_TYPES, ACTIVITY_TYPES, DESTINATION_NAMES, OFFERS } from "@constants";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
-import { replace } from "@utils/render";
-import { AbstractComponent, Event as EventPoint } from "@view";
+import { AbstractComponent } from "@view";
 import { EventItem } from "mock/data";
 
 const getTransferMarkup: GetMarkupCallBack = (transferType) => {
@@ -163,25 +162,8 @@ export class EditEvent extends AbstractComponent {
     return createEditEventTemplate(this._options);
   };
 
-
-  onSaveEventClick = () => {
+  setOnSaveEventHandler = (cb: (e: Event) => void) => {
     const button = this.getElement()?.querySelector('.event__save-btn');
-
-    button?.addEventListener('click', (e: Event) => {
-      e.preventDefault();
-      const event = new EventPoint(this._options);
-      replace(event.getElement(), this._element);
-      event.onEditEventClick();
-    });
-  };
-
-  onEscClick = () => {
-    window.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Escape' || e.code === 'Escape') {
-        const event = new EventPoint(this._options);
-        replace(event.getElement(), this._element);
-        event.onEditEventClick();
-      }
-    });
+    button?.addEventListener('click', cb);
   };
 }

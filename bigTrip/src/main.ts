@@ -6,14 +6,12 @@ import {
   TripInfo,
   Menu,
   Filter,
-  Sort,
-  EventList,
 } from "@view";
 import { generateData } from "./mock/data";
 import { getTotalCost } from "@utils/getTotalCost";
 import { TripController } from "./controllers/tripController";
 
-const data = [];
+const data = generateData();
 const totalCostNumber = getTotalCost(data);
 
 const info = new Info();
@@ -22,7 +20,6 @@ const totalCost = new TotalCost(totalCostNumber);
 const menu = new Menu();
 const filter = new Filter();
 const buttonNewEvent = new ButtonNewEvent();
-
 
 const tripMainNode = document.querySelector('.trip-main');
 render(tripMainNode, info, Position.AfterBegin);

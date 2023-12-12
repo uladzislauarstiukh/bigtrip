@@ -1,6 +1,6 @@
-import { OfferItem, PictureItem } from "mock/data";
+import { OfferItem, PictureItem, SortType } from "mock/types";
 
-export type GetTemplateParams = string | OfferItem | PictureItem;
+export type GetTemplateParams = string | OfferItem | PictureItem | SortType;
 
 export type GetMarkupCallBack = (options: GetTemplateParams, idx?: number) => string;
 

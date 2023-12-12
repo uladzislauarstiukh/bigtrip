@@ -33,9 +33,15 @@ const replace = (newComponent: ViewComponent, oldComponent: ViewComponent) => {
   }
 };
 
+const remove = (component: ViewComponent) => {
+  component.getElement()?.remove();
+  component.removeElement();
+};
+
 export {
   Position,
   render,
   createNodeElement,
-  replace
+  replace,
+  remove
 };

@@ -586,6 +586,11 @@ main {
   border-color: #000000;
 }
 
+.trip-sort__icon {
+  font-size: 18px;
+  margin-left: 5px;
+}
+
 .trip-sort__input:checked+.trip-sort__btn::before {
   content: "";
   position: absolute;

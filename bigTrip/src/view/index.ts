@@ -10,3 +10,4 @@ export { Sort } from './sort/sort';
 export { TotalCost } from './totalCost/totalCost';
 export { TripInfo } from './tripInfo/tripInfo';
 export { Filter } from './filter/filter';
+export { NoEvents } from './noEvents/NoEvents';

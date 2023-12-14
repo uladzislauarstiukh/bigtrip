@@ -1,7 +1,7 @@
-import { getDateFormatMonthDay } from "@utils/dates";
+import { getDateDiffInDHM, getDateFormatMonthDay } from "@utils/dates";
 import { GetMarkupCallBack, getTemplate } from "@utils/getTemplate";
 import { AbstractComponent } from "@view";
-import { EventItem } from "mock/data";
+import { EventItem } from "mock/types";
 
 const getOfferMarkup: GetMarkupCallBack = ({ title, price }) => {
 
@@ -21,10 +21,9 @@ const createEventTemplate = (options: EventItem) => {
   const minutesArrive = dateFrom.getMinutes();
   const hoursLeave = dateTo.getHours();
   const minutesLeave = dateTo.getMinutes();
-  const durationTime = new Date(+dateTo - +dateFrom);
-  const durationHours = durationTime.getHours();
-  const durationMinutes = durationTime.getMinutes();
+  const { days, hours, minutes } = getDateDiffInDHM(dateFrom, dateTo);
   const { month, day } = getDateFormatMonthDay(dateTo);
+  const displayDays = days ? `${days}D` : '';
   const offersTemplate = getTemplate(offers, getOfferMarkup);
 
   return (
@@ -43,7 +42,7 @@ const createEventTemplate = (options: EventItem) => {
             —
             <time class="event__end-time" datetime="2019-03-18T13:35">${hoursLeave}:${minutesLeave}</time>
           </p>
-          <p class="event__duration">${durationHours}H ${durationMinutes}M</p>
+          <p class="event__duration">${displayDays} ${hours}H ${minutes}M</p>
         </div>
 
         <p class="event__price">

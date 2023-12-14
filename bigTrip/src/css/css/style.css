@@ -503,7 +503,7 @@ main {
   font-size: 44px;
   line-height: 60px;
   text-align: center;
-  color: #ffffff;
+  color: #ffd054;
   opacity: 0.89;
 }
 
@@ -584,6 +584,11 @@ main {
   position: relative;
   color: #000000;
   border-color: #000000;
+}
+
+.trip-sort__icon {
+  font-size: 18px;
+  margin-left: 5px;
 }
 
 .trip-sort__input:checked+.trip-sort__btn::before {
